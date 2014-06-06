@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+
+	"name": "Livestats Login",
+	"version": "1.0",
+	"description": "",
+	"permissions": [
+		"tabs",
+		"storage",
+		"webRequest",
+		"webRequestBlocking",
+		"https://cloud.livesystems.info/*",
+		"http://localhost:8000/*"
+	],
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"page_action": {
+		"default_icon": "favicon.png",
+		"default_popup": "popup.html",
+		"default_title": "Livestats Login"
+	},
+	"incognito": "split",
+	"externally_connectable": {
+		"matches": [
+			"https://cloud.livesystems.info/*",
+			"http://localhost:8000/*"
+		]
+	}
+}
