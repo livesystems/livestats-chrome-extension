@@ -77,9 +77,7 @@ jQuery(document).ready(function($) {
 					contentType: "application/json; charset=utf-8",
 					data: JSON.stringify(postData),
 					success: function(resp) {
-						console.log(resp);
 						LSEXT.setToken(resp.token, function() {
-							console.log(resp.token);
 							if (resp.token) {
 								window.location = next;
 							} else {
