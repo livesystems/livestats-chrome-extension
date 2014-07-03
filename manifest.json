@@ -2,8 +2,12 @@
 	"manifest_version": 2,
 
 	"name": "Livestats Login",
-	"version": "1.0",
-	"description": "",
+	"short_name": "Login to Livestats on your TV",
+	"description": "Permanently login into Livestats with a secure token, allowing you to have it open on your TV screen without entering your password.",
+	"author": "Live Systems",
+
+	"version": "1.1",
+
 	"permissions": [
 		"tabs",
 		"storage",
