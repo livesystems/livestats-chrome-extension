@@ -30,51 +30,70 @@ jQuery(document).ready(function($) {
 		if (token) {
 			// show logout button
 			formLogin.after(logoutTrigger);
-			logoutTrigger.on('click', function(e) {
-				e.preventDefault();
-				if (!loading) {
-					loading = true;
-					LSEXT.setToken('', function() {
-						loading = false;
-						logoutTrigger.after(loginTrigger);
-						logoutTrigger.remove();
-					});
-				}
-			});
+			bindLogoutAction();
 		} else {
 			// show login button
 			formLogin.after(loginTrigger);
-			loginTrigger.on('click', function(e) {
-				e.preventDefault();
-				if (!loading) {
-					loading = true;
-					loginTrigger.html('<span class="loader"></span>');
-					var postData = {
-						username: form.find('input[name="username"]').val(),
-						password: form.find('input[name="password"]').val(),
-						device_name: 'Browser',
-						device_type: 'browser',
-						device_id: fingerprint
-					};
-					$.ajax({
-						type: "POST",
-						url: '/api/v2/devices/',
-						dataType: 'json',
-						contentType: "application/json; charset=utf-8",
-						data: JSON.stringify(postData),
-						success: function(resp) {
-							LSEXT.setToken(resp.token, function() {
-								window.location = next;
-							});
-						},
-						error: function(e) {
-							loading = false;
-							loginTrigger.html(loginTriggerText);
-							loginError.show();
-						}
-					});
-				}
-			});
+			bindLoginAction();
 		}
 	});
+
+	function bindLogoutAction() {
+		logoutTrigger.on('click', function(e) {
+			e.preventDefault();
+			if (!loading) {
+				loading = true;
+				logoutTrigger.html('<span class="loader"></span>');
+				LSEXT.setToken('', function() {
+					logoutTrigger.html('Logged out!');
+					setTimeout(function() {
+						loading = false;
+						logoutTrigger.after(loginTrigger);
+						bindLoginAction();
+						logoutTrigger.remove();
+					}, 1000);
+				});
+			}
+		});
+	}
+
+	function bindLoginAction() {
+		loginTrigger.on('click', function(e) {
+			e.preventDefault();
+			if (!loading) {
+				loading = true;
+				loginTrigger.html('<span class="loader"></span>');
+				var postData = {
+					username: form.find('input[name="username"]').val(),
+					password: form.find('input[name="password"]').val(),
+					device_name: 'Browser',
+					device_type: 'browser',
+					device_id: fingerprint
+				};
+				$.ajax({
+					type: "POST",
+					url: '/api/v2/devices/',
+					dataType: 'json',
+					contentType: "application/json; charset=utf-8",
+					data: JSON.stringify(postData),
+					success: function(resp) {
+						console.log(resp);
+						LSEXT.setToken(resp.token, function() {
+							console.log(resp.token);
+							if (resp.token) {
+								window.location = next;
+							} else {
+								loginTrigger.html('Sorry, something went wrong.');
+							}
+						});
+					},
+					error: function(e) {
+						loading = false;
+						loginTrigger.html(loginTriggerText);
+						loginError.show();
+					}
+				});
+			}
+		});
+	}
 });
