@@ -1,32 +1,25 @@
-EXT = {};
+LSEXT = {};
 
 // get token at start
 chrome.storage.local.get({
 	token: ''
 }, function (items) {
-	EXT.token = items.token;
+	LSEXT.token = items.token;
 });
 
 // update token when changed
 chrome.storage.onChanged.addListener(function(changes, areaName) {
 	if (changes && changes.token) {
-		EXT.token = changes.token.newValue;
+		LSEXT.token = changes.token.newValue;
 	}
 });
 
-// set token function
-function setToken(token, callback) {
-	chrome.storage.local.set({ 'token': token }, function() {
-		callback();
-	});
-}
-
 // set the token on each request
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
-		if (EXT.token) {
+		if (LSEXT.token) {
 			details.requestHeaders.push({
 				'name': 'Token',
-				'value': EXT.token
+				'value': LSEXT.token
 			});
 		}
 		return { requestHeaders: details.requestHeaders };
@@ -42,24 +35,4 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	} else {
 		chrome.pageAction.hide(tabId);
 	}
-});
-
-// listen for connections from the web
-chrome.runtime.onConnectExternal.addListener(function(port) {
-	if (EXT.token) {
-		port.postMessage({ canLogout: 'canLogout' });
-	} else {
-		port.postMessage({ canLogin: 'canLogin' });
-	}
-	port.onMessage.addListener(function(message) {
-		if (message.token) {
-			setToken(message.token, function() {
-				port.postMessage({ saved: 'saved' });
-			});
-		} else if (message.logout) {
-			setToken('', function() {
-				port.postMessage({ logoutDone: 'logoutDone' });
-			})
-		}
-	});
 });
