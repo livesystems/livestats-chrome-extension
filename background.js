@@ -21,6 +21,10 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
 				'name': 'Token',
 				'value': LSEXT.token
 			});
+			// check if we should log out
+			if (details.url && (details.url.indexOf('https://cloud.livesystems.info/logout/') != -1 || details.url.indexOf('http://localhost:8000/logout/') != -1)) {
+				chrome.storage.local.set({ 'token': '' });
+			}
 		}
 		return { requestHeaders: details.requestHeaders };
 	},
