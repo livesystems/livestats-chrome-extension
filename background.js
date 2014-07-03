@@ -22,19 +22,19 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details) {
 				'value': LSEXT.token
 			});
 			// check if we should log out
-			if (details.url && (details.url.indexOf('https://cloud.livesystems.info/logout/') != -1 || details.url.indexOf('http://localhost:8000/logout/') != -1)) {
+			if (details.url && (details.url.indexOf('https://cloud.livesystems.info/logout/') != -1)) {
 				chrome.storage.local.set({ 'token': '' });
 			}
 		}
 		return { requestHeaders: details.requestHeaders };
 	},
-	{ urls: ["https://cloud.livesystems.info/*", "http://localhost:8000/*"] },
+	{ urls: ["https://cloud.livesystems.info/*"] },
 	["blocking", "requestHeaders"]
 );
 
 // check if we should show the page action
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-	if (tab.url && (tab.url.indexOf('https://cloud.livesystems.info') != -1 || tab.url.indexOf('http://localhost:8000') != -1)) {
+	if (tab.url && (tab.url.indexOf('https://cloud.livesystems.info') != -1)) {
 		chrome.pageAction.show(tabId);
 	} else {
 		chrome.pageAction.hide(tabId);

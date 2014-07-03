@@ -9,8 +9,7 @@
 		"storage",
 		"webRequest",
 		"webRequestBlocking",
-		"https://cloud.livesystems.info/*",
-		"http://localhost:8000/*"
+		"https://cloud.livesystems.info/*"
 	],
 	"icons": {
 		"16": "icon16.png",
@@ -23,8 +22,7 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"https://cloud.livesystems.info/login/*",
-				"http://localhost:8000/login/*"
+				"https://cloud.livesystems.info/login/*"
 			],
 			"js": ["jquery.min.js", "fingerprint.js", "content.js"]
 		}
@@ -37,8 +35,7 @@
 	"incognito": "split",
 	"externally_connectable": {
 		"matches": [
-			"https://cloud.livesystems.info/*",
-			"http://localhost:8000/*"
+			"https://cloud.livesystems.info/*"
 		]
 	}
 }
